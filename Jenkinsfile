@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:last'
-            args '-p 3000:3000'
+                args '-p 3000:3000'
         }
     }
     environment {
@@ -19,9 +19,11 @@ pipeline {
                 sh './jenkins/scripts/test.sh'
             }
         }
-        stage('Start') {
+        stage('Deliver') {
             steps {
-                sh 'npm start'
+                sh './jenkins/scripts/deliver.sh'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
